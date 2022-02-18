@@ -10,7 +10,7 @@ import Lottie
 
 struct LottieView : UIViewRepresentable {
     
-    typealias UIViewType = UIView
+    typealias UIViewType = UIView // 여기에다가 이거를 추가했습니다.
     
     func makeUIView(context: UIViewRepresentableContext<LottieView>) -> UIView {
         
