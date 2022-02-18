@@ -13,7 +13,7 @@ struct LoginCheckView: View {
             
             VStack {
                 LottieView()
-                    .frame(width : 200, height : 200)
+                    .frame(width : 200, height : 200) // 로티뷰 선언 후 뷰 크기 커스텀 조절, 특별한 것은 없음.
                 
                 Text("Login Success!")
                     .font(.largeTitle.bold())
