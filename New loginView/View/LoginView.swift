@@ -32,7 +32,7 @@ struct LoginView: View {
                 VStack{
                     HStack {
                         Button(action: {
-                            presentationMode.wrappedValue.dismiss()
+                            presentationMode.wrappedValue.dismiss() // 뷰의 디스미스를 하고 싶은 경우 Environment로 선언해주고 난 후 랩밸류, 디스미스 해준다.
                         }, label: {
                             Image(systemName: "xmark")
                                 .font(.title3.bold())
@@ -46,12 +46,12 @@ struct LoginView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width : 200)
-                        .clipShape(Circle())
+                        .clipShape(Circle()) // 클립셰입으로 이미지 모양을 정해서 다듬어 줄 수 있다.
                         .padding()
                     
                     Text("Let's explore the information free!")
                         .font(.body)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.center) // 텍스트 박스 글자 정렬(가운데 정렬)
                     
                     VStack(alignment: .leading, spacing: 8){
                         HStack {
@@ -65,23 +65,25 @@ struct LoginView: View {
                         Text("User ID")
                             .font(.headline)
                         
-                        TextField("E-mail Account", text: $idString)
+                        TextField("E-mail Account", text: $idString) // idString의 변수와 함께 바인딩 되어서 값을 전달해준다.
                             .font((.system(size: 20, weight: .semibold)))
                             .foregroundColor(Color.black)
                             .padding(.top, 3)
-                            .keyboardType(.emailAddress)
-                            .autocapitalization(.none)
-                            .onChange(of: idString) {
+                            .keyboardType(.emailAddress) // 토글키보드를 이메일 입력용으로 소환한다.
+                            .autocapitalization(.none) // 알파벳 자동 대문자 기능 해제,
+                            .onChange(of: idString) { //textfield에서 입력되는 문자에 따라서 콤바인 된 변수가 변하게 되는데, 이 때에 함수를 통해 불리언 값을 불러오고
+                                //불려진 불리언 값으로 아이디의 준비여부를 말하는 변수의 값에 담아주었다.
                                 self.isIDPrepared = checkIDString(id: $0)
                                 if isIDPrepared {
                                     idStatus = .good
                                 } else if $0.count == 0 {
                                     idStatus = .yet
                                 } else {
-                                    idStatus = .bad
+                                    idStatus = .bad // 아이디가 조건만족시, 조건 불만족시, 입력이 되어있지 않을 시 세단계로 구분해서 상태를 정의하고,
+                                    //물론 이 단계에서는 열거형을 통해서 상태를 정의하다.
                                 }
                                 
-                                if isIDPrepared && isPWPrepared {
+                                if isIDPrepared && isPWPrepared { // 두 조건 모두 만족시라는 연산자를 통해서 최종 로그인 준비상태 변수의 값을 넣어준다.
                                     isLoginPrepared = true
                                 }
                                     
@@ -97,7 +99,7 @@ struct LoginView: View {
                         case .good:
                             Divider()
                                 .background(.blue)
-                        }
+                        } // 뷰에서 조건에 따라서 상태를 변화시킬때는 다음과 같이 미리 스위치를 선언해서 조건에 따라서 뷰의 모습을 리턴해준다.
 
                         Text("User Password")
                             .font(.headline)
@@ -109,7 +111,8 @@ struct LoginView: View {
                             .autocapitalization(.none)
                             .padding(.top, 3)
                             .onChange(of: passwordString) {
-                                self.isPWPrepared = checkPWString(pw: $0)
+                                self.isPWPrepared = checkPWString(pw: $0) // 옆에 보이는 $0는 of : 옆에 있는 상수를 지칭하고, 여기에서는 passWordString의 현상태 자체이다.
+                                //(아마 콤바인하고 관련있는듯.)
                                 if isPWPrepared {
                                     pwStatus = .good
                                 } else if $0.count == 0 {
