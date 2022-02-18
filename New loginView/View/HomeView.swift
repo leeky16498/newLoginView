@@ -10,14 +10,14 @@ import UIKit
 
 struct HomeView: View {
     
-    @State var showLoginView : Bool = false
+    @State var showLoginView : Bool = false // 로그인 뷰 스위치
     
     var body: some View {
         
                 VStack {
                     Image("Background")
-                        .resizable()
-                        .scaledToFit()
+                        .resizable() // 조절 가능 옵션 
+                        .scaledToFit() // 화면에 맞게 자동 조절
                         .frame(width : 350)
                         .padding()
                     
@@ -31,7 +31,7 @@ struct HomeView: View {
                         .padding()
                     
                     Button(action: {
-                        showLoginView.toggle()
+                        showLoginView.toggle() // 뷰 스위치 작동
                     }, label: {
                         Text("Log In")
                             .font(.headline)
@@ -43,7 +43,9 @@ struct HomeView: View {
                             .shadow(color: .gray, radius: 3, x: 3, y: 3)
                             
                     })
-                        .fullScreenCover(isPresented : $showLoginView, content: LoginView.init)
+                        .fullScreenCover(isPresented : $showLoginView, content: LoginView.init) 
+                    // UIKit에서 일반적으로 사용했던, ModalPresentation과 유사한 기능이며, content에서 마지막에 init 까먹지 말기)
+          
                     
                     Button(action:  {
                         
