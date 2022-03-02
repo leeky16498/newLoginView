@@ -31,7 +31,7 @@ struct HomeView: View {
                         .padding()
                     
                     Button(action: {
-                        showLoginView.toggle()
+                        showLoginView.toggle() //LoginView()
                     }, label: {
                         Text("Log In")
                             .font(.headline)

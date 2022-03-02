@@ -11,7 +11,7 @@ import Firebase
 @main
 struct New_loginViewApp: App {
     
-    @StateObject var loginModel : LoginModel = LoginModel()
+    @StateObject var loginModel : LoginViewModel = LoginViewModel()
     
     init() {
         FirebaseApp.configure()

@@ -10,23 +10,17 @@ import SwiftUI
 struct LoginView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var loginModel : LoginModel
+    @EnvironmentObject var loginViewModel : LoginViewModel
     
-    @State var idString : String = ""
-    @State var passwordString : String = ""
-    @State var isLoginPrepared : Bool = false
-    
-    @State var isIDPrepared : Bool = false
-    @State var isPWPrepared : Bool = false
     @State var idStatus : IdStatus = .yet
     @State var pwStatus : PwStatus = .yet
     
     var body: some View {
         ZStack{
             Color.white.ignoresSafeArea(.all)
-            if loginModel.singedIn == .good {
+            if loginViewModel.singedIn == .good {
                 LoginCheckView()
-            } else if loginModel.singedIn == .fail{
+            } else if loginViewModel.singedIn == .fail{
                 Text("failed")
             } else {
                 VStack{
@@ -65,63 +59,63 @@ struct LoginView: View {
                         Text("User ID")
                             .font(.headline)
                         
-                        TextField("E-mail Account", text: $idString)
+                        TextField("E-mail Account", text: $loginViewModel.idString)
                             .font((.system(size: 20, weight: .semibold)))
                             .foregroundColor(Color.black)
                             .padding(.top, 3)
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
-                            .onChange(of: idString) {
-                                self.isIDPrepared = checkIDString(id: $0)
-                                if isIDPrepared {
-                                    idStatus = .good
-                                } else if $0.count == 0 {
-                                    idStatus = .yet
-                                } else {
-                                    idStatus = .bad
-                                }
-                                
-                                if isIDPrepared && isPWPrepared {
-                                    isLoginPrepared = true
-                                }
-                                    
-                            }
+//                            .onChange(of: loginViewModel.idString) {
+//                                self.isIDPrepared = loginViewModel.checkIDString(id: $0)
+//                                if isIDPrepared {
+//                                    idStatus = .good
+//                                } else if $0.count == 0 {
+//                                    idStatus = .yet
+//                                } else {
+//                                    idStatus = .bad
+//                                }
+//
+//                                if isIDPrepared && isPWPrepared {
+//                                    isLoginPrepared = true
+//                                }
+//
+//                            }
                         
-                        switch idStatus {
-                        case .yet:
-                            Divider()
-                                .background(.gray)
-                        case .bad:
-                            Divider()
-                                .background(.red)
-                        case .good:
-                            Divider()
-                                .background(.blue)
-                        }
+//                        switch loginViewModel.idStatus {
+//                        case .yet:
+//                            Divider()
+//                                .background(.gray)
+//                        case .bad:
+//                            Divider()
+//                                .background(.red)
+//                        case .good:
+//                            Divider()
+//                                .background(.blue)
+//                        }
 
                         Text("User Password")
                             .font(.headline)
                             .padding(.top, 25)
                         
-                        TextField("At least 8 strings", text: $passwordString)
+                        TextField("At least 8 strings", text: $loginViewModel.passwordString)
                             .font((.system(size: 20, weight: .semibold)))
                             .foregroundColor(Color.black)
                             .autocapitalization(.none)
                             .padding(.top, 3)
-                            .onChange(of: passwordString) {
-                                self.isPWPrepared = checkPWString(pw: $0)
-                                if isPWPrepared {
-                                    pwStatus = .good
-                                } else if $0.count == 0 {
-                                    pwStatus = .yet
-                                } else {
-                                    pwStatus = .bad
-                                }
-                                
-                                if isIDPrepared && isPWPrepared {
-                                    isLoginPrepared = true
-                                }
-                            }
+//                            .onChange(of: loginViewModel.passwordString) {
+//                                self.isPWPrepared = loginViewModel.checkPWString(pw: $0)
+//                                if isPWPrepared {
+//                                    pwStatus = .good
+//                                } else if $0.count == 0 {
+//                                    pwStatus = .yet
+//                                } else {
+//                                    pwStatus = .bad
+//                                }
+//                                
+//                                if isIDPrepared && isPWPrepared {
+//                                    isLoginPrepared = true
+//                                }
+//                            }
                         
                         switch pwStatus {
                         case .yet:
@@ -148,12 +142,11 @@ struct LoginView: View {
                             
                         }
                         .padding(.top, 5)
-                        
                     }
                     .padding(.top, 25)
                     
                     Button(action: {
-                        loginModel.loginAccount(email: idString, passWord: passwordString)
+                        loginViewModel.loginAccount(email: loginViewModel.idString, passWord: loginViewModel.passwordString)
                         
                     }, label: {
                         Text("Log in")
@@ -161,11 +154,11 @@ struct LoginView: View {
                             .frame(height : 60)
                             .font(.headline)
                             .foregroundColor(.white)
-                            .background(isLoginPrepared ? Color.accentColor : .gray)
+                            .background(loginViewModel.isLoginPrepared ? Color.accentColor : .gray)
                             .cornerRadius(10)
                             .shadow(color: .gray, radius: 3, x: 3, y: 3)
                     })
-                        .disabled(isLoginPrepared == false)
+                    .disabled(loginViewModel.isLoginPrepared == false)
                         .padding(.top, 25)
                         .padding(.bottom, 10)
                     
@@ -177,35 +170,4 @@ struct LoginView: View {
     }
 }
 
-extension LoginView {
-    
-    func checkIDString(id : String) -> Bool {
-        
-        if id.count > 8 && id.contains("@"){
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    func checkPWString(pw : String) -> Bool {
-        
-        if pw.count > 8 {
-            return true
-        } else {
-            return false
-        }
-    }
-}
 
-enum IdStatus {
-    case yet
-    case bad
-    case good
-}
-
-enum PwStatus {
-    case yet
-    case bad
-    case good
-}
